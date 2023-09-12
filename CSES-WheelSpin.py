@@ -20,7 +20,7 @@ pointer_length = 150
 pointer_x = center[0]
 pointer_start_y = 10
 pointer_end_y = 125
-pointer_color= (255,228,196)
+pointer_color= (0,75,150)
 pointer_thickness= 5
 
 
@@ -34,16 +34,16 @@ def create_wheel(image, radius, center, number_of_sections, rotating_angle,secti
 
 
         if i % 2 == 0:
-            color = (255,224,32)
+            color = (165,133,23)
         else:
-            color = (80,208,255)
+            color = (34,180,230)
 
         cv2.ellipse(image,center,(radius,radius),0,start_angle, end_angle, color,-1)
 
         text_position = (start_angle + end_angle) / 2
 
-        text_position_horizontal = int(center[0] + (radius - 50) * math.cos(math.radians(text_position)))
-        text_position_veritcle = int(center[1] + (radius - 50) * math.sin(math.radians(text_position)))
+        text_position_horizontal = int(center[0] + (radius - 100) * math.cos(math.radians(text_position)))
+        text_position_veritcle = int(center[1] + (radius - 100) * math.sin(math.radians(text_position)))
 
         label = section_labels[i]
         cv2.putText(image,label,(text_position_horizontal,text_position_veritcle),font_type,font_size,font_color,font_thickness,lineType=cv2.LINE_AA
@@ -54,20 +54,20 @@ def create_wheel(image, radius, center, number_of_sections, rotating_angle,secti
 
 spinning = False
 start_time = 0
-def on_clicking(click,x,y,flags,param):
+def on_clicking(click,w,x,y,z):
     global start_time
     global spinning
 
     if click == cv2.EVENT_LBUTTONDOWN and not spinning:
         spinning = True
-        start_time =time.time()
+        start_time = time.time()
 
 
 cv2.namedWindow('CSES Spin the Wheel')
 cv2.setMouseCallback('CSES Spin the Wheel', on_clicking)
 
-spin_duration = random.uniform(5, 8)
-speed = 20
+spin_duration = random.uniform(3, 8)
+speed = 175
 
 while True:
     if spinning:
@@ -87,6 +87,8 @@ while True:
         break
     elif key == 13:
         spinning = False
+        spin_duration = random.uniform(3, 8)
+
 
 cv2.destroyAllWindows()
 
