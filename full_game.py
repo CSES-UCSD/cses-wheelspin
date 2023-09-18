@@ -6,6 +6,7 @@ import time
 import pyautogui
 from turtle import ht
 import mediapipe as mp
+from repo import repofn
 
 # Parameters for creating the wheel
 radius = 300
@@ -84,41 +85,11 @@ while True:
         new_image = create_wheel(image, radius, center, number_of_sections, rotating_angle, section_labels)
         cv2.line(new_image, (pointer_x, pointer_start_y), (pointer_x, pointer_end_y), pointer_color, pointer_thickness)
 
-    #from the repo
-    _, frame = cap.read()
-    frame = cv2.flip(frame, 1)
-    frame_height, frame_width, _ = frame.shape
-    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    output = hand_detector.process(rgb_frame)
-    hands = output.multi_hand_landmarks
+    if repofn(cap, hand_detector, drawing_utils, screen_width, screen_height, index_y, smoothening, plocx, plocy, clocx, clocy):
+        pyautogui.click()
+        start_time = time.time() # Start the spin timer
+        spinning = True
 
-    if hands:
-        for hand in hands:
-            drawing_utils.draw_landmarks(frame, hand)
-            landmarks = hand.landmark
-
-            for id, landmark in enumerate(landmarks):
-                x = int(landmark.x * frame_width)
-                y = int(landmark.y * frame_height)
-
-                if id == 8:
-                    cv2.circle(img=frame, center=(x, y), radius=15, color=(0, 255, 255))
-                    index_x = (screen_width / frame_width) * x
-                    index_y = (screen_height / frame_height) * y
-                    clocx = plocx + (index_x - plocx) / smoothening
-                    clocy = plocy + (index_y - plocy) / smoothening
-                    pyautogui.moveTo(clocx, clocy)
-                    plocx, plocy = clocx, clocy
-
-                if id == 4:
-                    cv2.circle(img=frame, center=(x, y), radius=15, color=(0, 255, 255))
-                    thumb_x = (screen_width / frame_width) * x
-                    thumb_y = (screen_height / frame_height) * y
-
-                    if abs(index_y - thumb_y) < 70:
-                        pyautogui.click()
-                        start_time = time.time()  # Start the spin timer
-                        spinning = True
 
     cv2.imshow('CSES Spin the Wheel', new_image)
 
