@@ -12,11 +12,11 @@ from repo import repofn
 radius = 300
 center = (400, 400)
 number_of_sections = 6
-font_size = 2
+font_size = 1
 font_type = cv2.FONT_HERSHEY_PLAIN
 font_thickness = 2
 font_color = (0, 0, 0)
-section_labels = ["one", "two", "three", "four", "five", "six"]
+section_labels = ["2 Raffle", "1 Raffle", "Candy", "Nothing", "3 Raffle", "T-shirt"]
 rotating_angle = 0
 
 # Pointer parameters
@@ -94,7 +94,7 @@ while True:
     cv2.imshow('CSES Spin the Wheel', new_image)
 
     key = cv2.waitKey(1)
-    if key == 27:
+    if key == ord('q'):
         break
     elif key == 13:
         spinning = False
